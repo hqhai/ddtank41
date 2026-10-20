@@ -13,7 +13,7 @@ D="$(cd "$(dirname "$0")/.." && pwd)"
 OUT="$D/out"
 RUN="$OUT/run"
 mkdir -p "$RUN/tmp"
-set -a; . "$D/server.env"; set +a
+[ -f "$D/server.env" ] && { set -a; . "$D/server.env"; set +a; }
 WEB_PORT="${WEB_PORT:-80}"; GAME_PORT="${GAME_PORT:-9500}"; WS_PORT="${WS_PORT:-9501}"; FCGI_PORT="${FCGI_PORT:-9000}"
 
 start() { # name dir command

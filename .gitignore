@@ -1,2 +1,3 @@
 deploy/out/
 deploy/server.env
+deploy/docker/.env

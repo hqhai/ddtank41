@@ -1,27 +1,23 @@
 #!/usr/bin/env bash
-# One-shot: build everything and assemble a ready-to-run deployment in deploy/out/.
-#   deploy/setup.sh            build + download resources + configure
+# Build everything and assemble a ready-to-run deployment in deploy/out/ (or $OUT).
+#   deploy/setup.sh            build + download resources + assemble + configure
+#   deploy/setup.sh assemble   only assemble the static site (flash client, Ruffle, fonts)
 #   deploy/setup.sh configure  only re-apply deploy/server.env to the configs
 #
 # Layout produced:
-#   deploy/out/server/{Center,Fighting,Road}.Service   game servers (run with mono, or natively on Windows)
-#   deploy/out/web/{Tank.Flash,Tank.Request}           ASP.NET sites (portal "/" and API "/request")
-#   deploy/out/site/{flash,resource,ruffle}            static files: Flash client, resources, Ruffle
-#   deploy/out/sql/                                    SQL to run after restoring the databases
+#   out/server/{Center,Fighting,Road}.Service   game servers (run with mono, or natively on Windows)
+#   out/web/{Tank.Flash,Tank.Request}           ASP.NET sites (portal "/" and API "/request")
+#   out/site/{flash,resource,ruffle,fonts}      static files: Flash client, resources, Ruffle
+#   out/sql/                                    SQL to run after restoring the databases
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 D="$ROOT/deploy"
-OUT="$D/out"
+OUT="${OUT:-$D/out}"
+MODE="${1:-all}"
 RUFFLE_VERSION=0.7.1
 DEJAVU_VERSION=2.37.3
 
-[ -f "$D/server.env" ] || cp "$D/server.env.example" "$D/server.env"
-
-if [ "${1:-}" != "configure" ]; then
-  "$D/build-server.sh" "$OUT/server"
-  "$D/build-web.sh" "$OUT/web"
-  "$D/fetch-resources.sh" "$OUT/site"
-
+assemble() {
   echo "==> assembling flash client"
   rm -rf "$OUT/site/flash"
   cp -r "$ROOT/Source Flash/FlashSV1" "$OUT/site/flash"
@@ -44,10 +40,26 @@ if [ "${1:-}" != "configure" ]; then
     tar -xzf "$OUT/cache/dejavu.tgz" -C "$OUT/cache/dejavu" --strip-components=1
     cp "$OUT/cache/dejavu/ttf/"{DejaVuSans,DejaVuSans-Bold,DejaVuSerif,DejaVuSansMono}.ttf "$OUT/site/fonts/"
   fi
-fi
+}
 
-echo "==> configuring"
-rm -rf "$OUT/sql" && mkdir -p "$OUT/sql"
-cp "$D"/sql/*.sql "$OUT/sql/" 2>/dev/null || true
-python3 -I "$D/configure.py" "$D/server.env" "$OUT"
-echo "==> deployment ready in $OUT"
+configure() {
+  [ -f "$D/server.env" ] || cp "$D/server.env.example" "$D/server.env"
+  echo "==> configuring"
+  rm -rf "$OUT/sql" && mkdir -p "$OUT/sql"
+  cp "$D"/sql/*.sql "$OUT/sql/"
+  python3 -I "$D/configure.py" "$D/server.env" "$OUT"
+}
+
+case "$MODE" in
+  all)
+    "$D/build-server.sh" "$OUT/server"
+    "$D/build-web.sh" "$OUT/web"
+    "$D/fetch-resources.sh" "$OUT/site"
+    assemble
+    configure
+    ;;
+  assemble) assemble ;;
+  configure) configure ;;
+  *) echo "usage: $0 [all|assemble|configure]"; exit 1 ;;
+esac
+echo "==> done ($OUT)"

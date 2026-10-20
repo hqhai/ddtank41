@@ -1,0 +1,63 @@
+# DDTank 4.1 — one-command deployment.
+#   cd deploy/docker && cp .env.example .env   (edit PUBLIC_HOST / passwords)
+#   docker compose up -d --build
+# Then open http://PUBLIC_HOST:WEB_PORT/ , register an account and play (in any modern browser).
+name: ddtank41
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - sqldata:/var/opt/mssql
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -C -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      retries: 30
+
+  db-init:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    environment:
+      DB_PASSWORD: ${DB_PASSWORD}
+      PUBLIC_HOST: ${PUBLIC_HOST}
+      GAME_PORT: ${GAME_PORT}
+    volumes:
+      - ../../Database:/backup:ro
+      - ../sql:/sql:ro
+      - ./init-db.sh:/init-db.sh:ro
+    entrypoint: ["bash", "/init-db.sh"]
+    restart: "no"
+
+  game:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile
+    image: ddtank41:latest
+    depends_on:
+      db-init:
+        condition: service_completed_successfully
+    environment:
+      DB_HOST: sqlserver,1433
+      DB_USER: sa
+      DB_PASSWORD: ${DB_PASSWORD}
+      PUBLIC_HOST: ${PUBLIC_HOST}
+      WEB_PORT: "80"
+      PUBLIC_WEB_PORT: ${WEB_PORT}
+      GAME_PORT: ${GAME_PORT}
+      WS_PORT: ${WS_PORT}
+      LOGIN_KEY: ${LOGIN_KEY}
+      RUFFLE_LOG_LEVEL: ${RUFFLE_LOG_LEVEL:-error}
+    ports:
+      - "${WEB_PORT}:80"
+      - "${GAME_PORT}:${GAME_PORT}"   # game socket (native Flash Player / launcher clients)
+      - "${WS_PORT}:${WS_PORT}"       # websocket bridge for the browser client
+    restart: unless-stopped
+
+volumes:
+  sqldata:

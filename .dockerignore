@@ -1,0 +1,12 @@
+.git
+.vs
+**/.vs
+deploy/out
+deploy/server.env
+deploy/docker/.env
+Database
+GameAdmin
+Source Launcher
+Tank.Data
+Source Flash/src
+**/obj

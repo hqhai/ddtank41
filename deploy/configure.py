@@ -60,7 +60,9 @@ def main():
 
     host = env["PUBLIC_HOST"]
     port = env.get("WEB_PORT", "80")
-    web = f"http://{host}" + ("" if port == "80" else f":{port}")
+    # port players type in the browser (differs from WEB_PORT when docker maps e.g. 8080 -> 80)
+    public_port = env.get("PUBLIC_WEB_PORT") or port
+    web = f"http://{host}" + ("" if public_port == "80" else f":{public_port}")
     internal_web = env.get("INTERNAL_WEB_URL", f"http://127.0.0.1:{port}")
     player, game, member = env["DB_PLAYER"], env["DB_GAME"], env["DB_MEMBERSHIP"]
     key = env["LOGIN_KEY"]
