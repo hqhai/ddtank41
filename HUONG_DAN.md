@@ -63,8 +63,9 @@ Code vẫn chạy trên Windows như bản gốc (các sửa đổi đều tươ
 
 1. Cài SQL Server (hoặc dùng container như trên), restore `Database/*.bak` thành
    `Db_Membership`, `Project_Game34`, `Project_Player34`, rồi chạy lần lượt `deploy/sql/*.sql`.
-2. Mở `DDTank 3.0.sln` bằng Visual Studio 2022, build Center/Fighting/Road.Service; build
-   `Tank.Request` và `Tank.Flash` (Request.sln / Tank.Flash.Single.sln).
+2. Mở `DDTank 3.0.sln` bằng Visual Studio 2022, build Center/Fighting/Road.Service và
+   `GameServerScripts`, chép `GameServerScripts.dll` vào thư mục chạy của Road.Service và
+   Fighting.Service (cạnh file .exe); build `Tank.Request` và `Tank.Flash` (Request.sln / Tank.Flash.Single.sln).
 3. Dùng Git Bash: `deploy/setup.sh` để tải resource + Ruffle và sinh cấu hình vào `deploy/out/`
    (hoặc sửa tay `App.config`/`Web.config`: chuỗi kết nối, `LoginKey` giống nhau ở cả 2 web).
 4. IIS: site gốc trỏ `Tank.Flash`, application `/request` trỏ `Tank.Request`, virtual directory
@@ -93,9 +94,12 @@ Code vẫn chạy trên Windows như bản gốc (các sửa đổi đều tươ
 | Tank.Flash gửi sai định dạng login cho Tank.Request, `LoginKey` 2 bên khác nhau | Không vào được game | Sửa định dạng, cấu hình chung 1 key |
 | Flash Player đã bị khai tử | Không chạy được trên trình duyệt | Nhúng Ruffle + websockify + font tiếng Việt |
 | Chạy trên Linux/Docker | Chỉ Windows | Sửa đường dẫn, IniReader, console, log, phân biệt hoa/thường… |
+| Script AI phó bản (PvE) | Bị tác giả xoá (không biên dịch được) | Khôi phục từ lịch sử git + DLL cũ, bổ sung API engine → project `GameServerScripts` (598/757 script DB tham chiếu chạy được) |
+| Tạo nhân vật lần đầu | Client gọi đăng ký trước khi tài khoản game tồn tại → kẹt | Tạo tài khoản trước trong `VisualizeRegister` |
 
-Đã kiểm thử bằng trình duyệt tự động: đăng ký → tạo nhân vật → vào sảnh → tạo phòng →
-ghép trận với bot → bắn, phá địa hình, trừ máu.
+Đã kiểm thử bằng trình duyệt tự động: đăng ký → tạo nhân vật → vào sảnh → mua đồ trong Shop →
+tạo phòng PvP → ghép trận với bot → bắn, phá địa hình, trừ máu; 2 người chơi mời nhau vào
+phòng phó bản "Huyệt Ma Kiến" → vào trận với quái AI.
 
 ## Hạn chế còn lại
 
@@ -106,4 +110,9 @@ ghép trận với bot → bắn, phá địa hình, trừ máu.
 - Vũ khí dòng 124xx–126xx thiếu cả hình dạng nổ phía server (`bomb/*.bomb`) lẫn ảnh hố phía client
   (`image/bomb/crater/12401…`) → đạn của chúng không đục địa hình (7 file khác đã được bù từ đạn cùng loại hố).
 - Ảnh "báo tuần" (weekly) không có.
+- Phó bản: 134 script AI không tìm được mã nguồn ở đâu (vd. bản Ác mộng của Huyệt Ma Kiến / Gà Chạy,
+  `EvilTribeSimpleGame`, vài NPC) → các màn đó dùng AI mặc định hoặc không bắt đầu được; vài màn tiếp theo
+  thiếu dòng trong `Mission_Info` (1073, 1083, 1176…). Các chế độ sự kiện (World Cup, Mê cung, Boss guild,
+  Camp battle…) chưa được engine hỗ trợ.
+- Nhiều phó bản yêu cầu tối thiểu 2 người (mời bạn bằng nút **Mời** trong phòng).
 - GameAdmin (trang quản trị) chưa được đưa vào bản triển khai.
