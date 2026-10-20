@@ -44,6 +44,8 @@ namespace Game.Server.Managers
 			ArrayList files = ParseDirectory(new DirectoryInfo(path), compileVB ? "*.vb" : "*.cs", deep: true);
 			if (files.Count == 0)
 			{
+				// no script sources to compile: use the prebuilt scripts assembly if one is shipped
+				LoadPrecompiledScripts(dllName);
 				return true;
 			}
 			if (File.Exists(dllName))
@@ -105,6 +107,39 @@ namespace Game.Server.Managers
 				InsertAssembly(res.CompiledAssembly);
 			}
 			return true;
+        }
+
+        private static void LoadPrecompiledScripts(string dllName)
+        {
+			if (string.IsNullOrEmpty(dllName))
+			{
+				return;
+			}
+			string file = dllName.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
+			if (!File.Exists(file) && !Path.IsPathRooted(file))
+			{
+				file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, file);
+			}
+			if (!File.Exists(file))
+			{
+				return;
+			}
+			try
+			{
+				Assembly ass = Assembly.LoadFrom(file);
+				InsertAssembly(ass);
+				if (log.IsInfoEnabled)
+				{
+					log.Info("Loaded precompiled scripts: " + ass.Location);
+				}
+			}
+			catch (Exception e)
+			{
+				if (log.IsErrorEnabled)
+				{
+					log.Error("LoadPrecompiledScripts " + file, e);
+				}
+			}
         }
 
         public static object CreateInstance(string name)

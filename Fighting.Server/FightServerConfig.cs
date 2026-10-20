@@ -52,7 +52,7 @@ namespace Fighting.Server
 			ServerName = ConfigurationSettings.AppSettings["ServerName"];
 			Port = int.Parse(ConfigurationSettings.AppSettings["Port"]);
 			ScriptAssemblies = ConfigurationSettings.AppSettings["ScriptAssemblies"];
-			ScriptCompilationTarget = ConfigurationSettings.AppSettings["ScriptAssemblies"];
+			ScriptCompilationTarget = ConfigurationSettings.AppSettings["ScriptCompilationTarget"];
 			ZoneId = int.Parse(ConfigurationSettings.AppSettings["ServerID"]);
 			RootDirectory = new FileInfo(Assembly.GetEntryAssembly().Location).DirectoryName;
         }

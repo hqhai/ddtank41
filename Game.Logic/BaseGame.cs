@@ -689,6 +689,13 @@ namespace Game.Logic
 			m_tempGhostPoints = DrawCirclePoints(backroundHeight, 30, backroundHeight - 180, center);
 		}
 
+		public Box CreateBox(int x, int y, string model, ItemInfo item)
+		{
+			Box box = new Box(PhysicalId++, model, item, 1);
+			box.SetXY(x, y);
+			return AddBox(box, sendToClient: true);
+		}
+
 		public List<Box> CreateBox()
 		{
 			int num1 = m_players.Count + 2;
@@ -1080,6 +1087,11 @@ namespace Game.Logic
 				}
 			}
 			return null;
+		}
+
+		public PhysicalObj[] FindPhysicalObjByName(string name, bool includeInactive)
+		{
+			return FindPhysicalObjByName(name);
 		}
 
 		public PhysicalObj[] FindPhysicalObjByName(string name)

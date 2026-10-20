@@ -13,7 +13,7 @@ mkdir -p "$OUT" "$TMP"
 SRC="$TMP/src"
 rm -rf "$SRC" && mkdir -p "$SRC"
 (cd "$ROOT" && tar -cf - --exclude=bin --exclude=obj libdll packages Bussiness SqlDataProvider \
-   Game.Base Game.Logic Game.Server Center.Server Center.Service Fighting.Server Fighting.Service Road.Service) \
+   Game.Base Game.Logic Game.Server GameServerScripts Center.Server Center.Service Fighting.Server Fighting.Service Road.Service) \
   | tar -xf - -C "$SRC"
 
 for svc in Center Fighting Road; do
@@ -30,5 +30,12 @@ for svc in Center Fighting Road; do
   [ -f "$ROOT/$p/battle.xml" ] && cp "$ROOT/$p/battle.xml" "$dest/"
   # never ship Windows copies of framework assemblies (they break Mono)
   rm -f "$dest"/System.Configuration*.dll "$dest"/System.ServiceProcess.dll
+done
+# PvE AI scripts (missions, NPCs, dungeon controllers) named in the database; ScriptMgr loads
+# GameServerScripts.dll at start-up when the scripts folder holds no *.cs sources.
+echo "==> building GameServerScripts"
+dotnet build "$SRC/GameServerScripts/GameServerScripts.csproj" -c Release -nologo -v q -clp:ErrorsOnly -o "$TMP/GameServerScripts"
+for p in Fighting.Service Road.Service; do
+  cp "$TMP/GameServerScripts/GameServerScripts.dll" "$OUT/$p/"
 done
 echo "==> done: $OUT"

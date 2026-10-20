@@ -9,6 +9,8 @@ namespace Game.Server.GameRoom.Handle
     [GameRoomHandleAttbute((byte)GameRoomPackageType.GAME_ROOM_LOGIN)]
     public class Login : IGameRoomCommandHadler
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public bool CommandHandler(GamePlayer Player, GSPacketIn packet)
         {
             bool isInvite = packet.ReadBoolean();
@@ -156,6 +158,7 @@ namespace Game.Server.GameRoom.Handle
             }
             if (!flag)
             {
+                log.WarnFormat("{0} could not enter room {1} (type {2}, invite {3}, playing {4})", m_player.PlayerCharacter.NickName, m_roomId, m_hallType, m_isInvite, randomRoom != null && randomRoom.IsPlaying);
                 m_player.Out.SendRoomLoginResult(false);
             }
             return true;

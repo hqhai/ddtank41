@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- PvE AI scripts (missions, NPCs, dungeon controllers) referenced by name from the database
+       (Mission_Info.Script, NPC_Info.Script, Pve_Info...). Built into GameServerScripts.dll, which
+       Game.Base.ScriptMgr loads at start-up for both Road.Service and Fighting.Service. -->
+  <PropertyGroup>
+    <AssemblyName>GameServerScripts</AssemblyName>
+    <TargetFramework>net472</TargetFramework>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <LangVersion>Preview</LangVersion>
+    <NoWarn>$(NoWarn);CS0162;CS0168;CS0169;CS0219;CS0414;CS0649;CS0108;CS0114</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Bussiness\Bussiness.csproj" />
+    <ProjectReference Include="..\Game.Base\Game.Base.csproj" />
+    <ProjectReference Include="..\Game.Logic\Game.Logic.csproj" />
+    <ProjectReference Include="..\Game.Server\Game.Server.csproj" />
+    <ProjectReference Include="..\SqlDataProvider\SqlDataProvider.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Drawing" />
+  </ItemGroup>
+  <!-- Event modes this engine does not implement (football/World Cup pass-ball, labyrinth gates,
+       guild boss and camp battle awards, christmas snow, insect events). None of these missions
+       exist in Mission_Info, and their scripts need engine APIs that are missing here. -->
+  <ItemGroup>
+    <Compile Remove="AI\Messions\WC*.cs" />
+    <Compile Remove="AI\NPC\WorldCup*.cs" />
+    <Compile Remove="AI\Messions\Labyrinth*.cs" />
+    <Compile Remove="AI\Messions\BossGuild*.cs" />
+    <Compile Remove="AI\Messions\CampBattle*.cs" />
+    <Compile Remove="AI\Messions\Christmas*.cs" />
+    <Compile Remove="AI\Messions\Insect*.cs" />
+    <Compile Remove="AI\Messions\FarmBoss70002.cs" />
+  </ItemGroup>
+</Project>

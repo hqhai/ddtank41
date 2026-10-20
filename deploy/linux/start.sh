@@ -46,4 +46,4 @@ echo "started nginx on :$WEB_PORT"
 start ddt-ws "$RUN" "websockify $WS_PORT 127.0.0.1:$GAME_PORT 2>&1 | tee $RUN/websockify.log"
 
 echo
-echo "Game ready:  http://${PUBLIC_HOST}$( [ "$WEB_PORT" = 80 ] || echo ":$WEB_PORT" )/"
+P="${PUBLIC_WEB_PORT:-$WEB_PORT}"; echo "Game ready:  http://${PUBLIC_HOST}$( [ "$P" = 80 ] || echo ":$P" )/"

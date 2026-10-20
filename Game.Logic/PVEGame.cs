@@ -301,6 +301,11 @@ namespace Game.Logic
             return null;
         }
 
+        public LivingConfig BaseConfig()
+        {
+            return BaseLivingConfig();
+        }
+
         public LivingConfig BaseLivingConfig()
         {
             return new LivingConfig
@@ -1651,14 +1656,14 @@ namespace Game.Logic
                 value.MissionEventHandle -= m_missionAI.OnMissionEvent;
             }
             m_missionAI = ScriptMgr.CreateInstance(m_missionInfo.Script) as AMissionControl;
-            foreach (Player value2 in m_players.Values)
-            {
-                value2.MissionEventHandle += m_missionAI.OnMissionEvent;
-            }
             if (m_missionAI == null)
             {
                 BaseGame.log.ErrorFormat("Can't create game mission ai :{0}", m_missionInfo.Script);
                 m_missionAI = SimpleMissionControl.Simple;
+            }
+            foreach (Player value2 in m_players.Values)
+            {
+                value2.MissionEventHandle += m_missionAI.OnMissionEvent;
             }
             if (base.RoomType == eRoomType.Dungeon)
             {
@@ -1776,6 +1781,11 @@ namespace Game.Logic
             AddAction(new FocusFreeAction(x, y, type, delay, finishTime));
         }
 
+        public Layer CreateLayerBoss(int x, int y, string name, string model, string defaultAction, int scale, int rotation)
+        {
+            return Createlayerboss(x, y, name, model, defaultAction, scale, rotation);
+        }
+
         public Layer Createlayerboss(int x, int y, string name, string model, string defaultAction, int scale, int rotation)
         {
             Layer layer = new Layer(PhysicalId++, name, model, defaultAction, scale, rotation);
@@ -1837,6 +1847,11 @@ namespace Game.Logic
                 pkg.WriteString(info.ClassName);
             }
             SendToAll(pkg);
+        }
+
+        public void SendMissionInfo(object state)
+        {
+            SendMissionInfo();
         }
 
         public void SendMissionInfo()
@@ -1939,6 +1954,11 @@ namespace Game.Logic
                 pkg.WriteInt(count);
             }
             SendToAll(pkg);
+        }
+
+        public void SendUpdateUiData(object state)
+        {
+            SendUpdateUiData();
         }
 
         public void SendUpdateUiData()

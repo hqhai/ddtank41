@@ -10,6 +10,8 @@ using System.Collections.Specialized;
 using log4net;
 using System.Reflection;
 using Bussiness;
+using Bussiness.Interface;
+using SqlDataProvider.Data;
 using System.Configuration;
 using Tank.Request.Illegalcharacters;
 
@@ -97,6 +99,14 @@ namespace Tank.Request
                             HatColor = "";
                             using (PlayerBussiness db = new PlayerBussiness())
                             {
+                                // The client sends this request before Login.ashx, which is what creates the
+                                // game account on first entry, so make sure the account exists first.
+                                if (db.GetUserSingleByUserName(name) == null)
+                                {
+                                    PlayerInfo player = null;
+                                    BaseInterface inter = BaseInterface.CreateInterface();
+                                    db.ActivePlayer(ref player, name, pass, sex != 0, inter.ActiveGold, inter.ActiveMoney, context.Request.UserHostAddress, para["site"] ?? "");
+                                }
                                 string style = armID + "," + hairID + "," + faceID + "," + ClothID + "," + HatID;
                                 if (db.RegisterPlayer(name, pass, nickName, style,
                                     style, armColor, hairColor, faceColor, ClothColor, HatColor, sex,

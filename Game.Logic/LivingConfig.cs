@@ -232,6 +232,18 @@ namespace Game.Logic
 			}
         }
 
+        public bool HasTurn
+        {
+            get { return m_isTurn; }
+            set { m_isTurn = value; }
+        }
+
+        public bool IsShield
+        {
+            get { return HaveShield; }
+            set { HaveShield = value; }
+        }
+
         public bool IsTurn
         {
 			get

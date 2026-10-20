@@ -58,7 +58,8 @@ namespace Bussiness
         {
             Hashtable list = new Hashtable();
 
-            string filePath = Path.Combine(path ?? "", LanguageFile);
+            // Server.MapPath("~") ends with a backslash on Mono
+            string filePath = Path.Combine((path ?? "").TrimEnd('\\', '/'), LanguageFile);
             if (!File.Exists(filePath))
             {
                 log.Error("Language file : " + filePath + " not found !");

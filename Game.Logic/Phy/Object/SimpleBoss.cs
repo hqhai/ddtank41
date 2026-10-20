@@ -250,6 +250,17 @@ namespace Game.Logic.Phy.Object
 			}
 		}
 
+		public void CreateChild(int id, Point[] brithPoint, int maxCount, int maxCountForOnce, int type, int direction)
+		{
+			int num = 0;
+			int num2 = base.Game.Random.Next(0, maxCountForOnce);
+			for (int i = 0; i < num2; i++)
+			{
+				num = base.Game.Random.Next(0, brithPoint.Length);
+				CreateChild(id, brithPoint[num].X, brithPoint[num].Y, 4, maxCount, direction);
+			}
+		}
+
 		public List<SimpleNpc> FindChildLiving(int npcId)
 		{
 			List<SimpleNpc> list = new List<SimpleNpc>();

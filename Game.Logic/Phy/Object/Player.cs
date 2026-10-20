@@ -2724,6 +2724,11 @@ namespace Game.Logic.Phy.Object
             }
         }
 
+        public void StartSpeedMult(int x, int y)
+        {
+            StartSpeedMult(x, y, 0);
+        }
+
         public void StartSpeedMult(int x, int y, int delay)
         {
             Point point = new Point(x - X, y - Y);

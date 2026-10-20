@@ -8,6 +8,9 @@ namespace Game.Logic.Actions
         private LivingCallBackHandle m_func;
 
 		private Living m_target;
+
+        private LivingCallBack m_callback;
+
         public CallFunctionAction(LivingCallBackHandle func, Living target, int delay)
 			: base(delay)
         {
@@ -15,11 +18,24 @@ namespace Game.Logic.Actions
 			m_target = target;
         }
 
+        public CallFunctionAction(LivingCallBack callback, int delay)
+			: base(delay)
+        {
+			m_callback = callback;
+        }
+
         protected override void ExecuteImp(BaseGame game, long tick)
         {
 			try
 			{
-				m_func(m_target);
+				if (m_callback != null)
+				{
+					m_callback();
+				}
+				else
+				{
+					m_func(m_target);
+				}
 				//Console.WriteLine("func = {0}", m_func);
 			}
 			finally

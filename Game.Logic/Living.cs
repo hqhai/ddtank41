@@ -1089,6 +1089,11 @@ public class Living : Physics
         return JumpTo(x, y, action, delay, type, speed, callback, 0);
     }
 
+    public bool JumpToSpeed(int x, int y, string action, int delay, int type, int speed, LivingCallBack callback)
+    {
+        return JumpTo(x, y, action, delay, type, speed, callback);
+    }
+
     public bool JumpTo(int x, int y, string action, int delay, int type, int speed, LivingCallBack callback, int value)
     {
         Point point = m_map.FindYLineNotEmptyPointDown(x, y);
@@ -1186,6 +1191,11 @@ public class Living : Physics
     }
 
     public bool MoveTo(int x, int y, string action, int delay, LivingCallBack callback, int speed)
+    {
+        return MoveTo(x, y, action, "", speed, delay, callback, 0);
+    }
+
+    public bool MoveTo(int x, int y, string action, int delay, int speed, LivingCallBack callback)
     {
         return MoveTo(x, y, action, "", speed, delay, callback, 0);
     }
@@ -1915,6 +1925,17 @@ public class Living : Physics
     public bool ShootPoint(int x, int y, int bombId, int minTime, int maxTime, int bombCount, float time, int delay, LivingCallBack callBack)
     {
         m_game.AddAction(new LivingShootAction(this, bombId, x, y, 0, 0, bombCount, minTime, maxTime, time, delay, callBack));
+        return true;
+    }
+
+    public bool ShootPoint(int x, int y, int force, int angle, int bombId, int minTime, int maxTime, int bombCount, float time, int delay)
+    {
+        return ShootPoint(x, y, force, angle, bombId, minTime, maxTime, bombCount, time, delay, null);
+    }
+
+    public bool ShootPoint(int x, int y, int force, int angle, int bombId, int minTime, int maxTime, int bombCount, float time, int delay, LivingCallBack callBack)
+    {
+        m_game.AddAction(new LivingShootAction(this, bombId, x, y, force, angle, bombCount, minTime, maxTime, time, delay, callBack));
         return true;
     }
 
