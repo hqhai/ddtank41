@@ -9,6 +9,9 @@
     <script type="text/javascript" src="script/rightClick.js"></script>
     <script type="text/javascript" src="script/swfobject.js"></script>
     <script type="text/javascript" src="script/isSafeFlash.js"></script>
+    <!-- Ruffle: runs the Flash client in modern browsers (no Flash Player plugin needed) -->
+    <script type="text/javascript" src="/ruffle-config.js"></script>
+    <script type="text/javascript" src="/ruffle/ruffle.js"></script>
 <style type="text/css"> 
     html, body	{ height:100%; }
       body

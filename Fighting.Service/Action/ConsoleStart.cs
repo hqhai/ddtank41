@@ -1,4 +1,4 @@
-using Bussiness.Managers;
+﻿using Bussiness.Managers;
 using Fighting.Server;
 using Fighting.Server.Games;
 using Fighting.Server.Rooms;
@@ -45,7 +45,13 @@ namespace Fighting.Service.action
 				try
 				{
 					Console.Write("> ");
-					string[] para = Console.ReadLine().Split(' ');
+					string line = Console.ReadLine();
+					if (line == null)
+					{
+						// stdin closed (running as a background service): keep serving
+						System.Threading.Thread.Sleep(System.Threading.Timeout.Infinite);
+					}
+					string[] para = line.Split(' ');
 					switch (para[0].ToLower())
 					{
 					case "clear":

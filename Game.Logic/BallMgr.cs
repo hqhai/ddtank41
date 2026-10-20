@@ -119,7 +119,7 @@ namespace Game.Logic
 			{
 				if (current.HasTunnel)
 				{
-					string text = $"bomb\\{current.ID}.bomb";
+					string text = $"bomb/{current.ID}.bomb";
 					Tile tile = null;
 					if (File.Exists(text))
 					{

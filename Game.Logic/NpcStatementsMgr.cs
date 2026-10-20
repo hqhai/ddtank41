@@ -35,7 +35,7 @@ namespace Game.Logic
 
         public static bool Init()
         {
-			filePath = Directory.GetCurrentDirectory() + "\\ai\\npc\\npc_statements.txt";
+			filePath = Directory.GetCurrentDirectory() + "/ai/npc/npc_statements.txt";
 			random = new Random();
 			return ReLoad();
         }

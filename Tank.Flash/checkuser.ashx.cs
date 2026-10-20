@@ -29,18 +29,11 @@ namespace Tank.Flash
             string password = context.Request["password"];
             using (MemberShipBussiness db = new MemberShipBussiness())
             {                
-                if (db.CheckUsername(SiteTitle, username, password))
+                if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password) && db.CheckUsername(username, password))
                 {
                     context.Session["username"] = username;
                     context.Session["password"] = password;
-                    LoadingManager.Add(username, password);
-                    context.Response.Write("ok");
-                }
-                else if (db.CheckUsername("GameAdmin", username, password))
-                {
-                    context.Session["username"] = username;
-                    context.Session["password"] = password;
-                    LoadingManager.Add(username, password, true);
+                    LoadingManager.Add(username, password, db.CheckAdmin(username));
                     context.Response.Write("ok");
                 }
                 else

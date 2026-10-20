@@ -168,13 +168,13 @@ namespace Game.Base
 
         public static T LoadDataFile<T>(string filename, bool isEncrypt)
         {
-			if (!File.Exists("datas/" + filename + ".data"))
+			if (!File.Exists("Datas/" + filename + ".data"))
 			{
 				return default(T);
 			}
 			try
 			{
-				byte[] numArray = File.ReadAllBytes("datas/" + filename + ".data");
+				byte[] numArray = File.ReadAllBytes("Datas/" + filename + ".data");
 				if (isEncrypt)
 				{
 					numArray = Uncompress(numArray);
@@ -216,7 +216,7 @@ namespace Game.Base
 				{
 					numArray = Compress(numArray);
 				}
-				File.WriteAllBytes("datas/" + filename + ".data", numArray);
+				File.WriteAllBytes("Datas/" + filename + ".data", numArray);
 				return true;
 			}
 			catch (Exception value)

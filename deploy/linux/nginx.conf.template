@@ -1,0 +1,55 @@
+# generated from deploy/linux/nginx.conf.template by deploy/linux/start.sh
+load_module /usr/lib/nginx/modules/ngx_http_perl_module.so;
+worker_processes auto;
+pid __RUN__/nginx.pid;
+error_log __RUN__/nginx-error.log warn;
+events { worker_connections 1024; }
+http {
+  include /etc/nginx/mime.types;
+  default_type application/octet-stream;
+  access_log __RUN__/nginx-access.log;
+  client_body_temp_path __RUN__/tmp; fastcgi_temp_path __RUN__/tmp; proxy_temp_path __RUN__/tmp;
+  sendfile on;
+  # the Flash client expects a case-insensitive file system (Windows/IIS): requests whose case differs
+  # from the file on disk are rewritten to the real name (table built by deploy/linux/casemap.py)
+  perl_set $case_fixed_uri 'sub {
+    our %CASEMAP;
+    unless (%CASEMAP) {
+      open(my $f, "<", "__RUN__/casemap.txt") or return "";
+      while (my $l = <$f>) { chomp $l; my ($k, $v) = split /\t/, $l; $CASEMAP{$k} = $v; }
+      close $f;
+    }
+    my $u = shift->uri;
+    my $v = $CASEMAP{lc $u};
+    return (defined $v && $v ne $u) ? $v : "";
+  }';
+  gzip on; gzip_types text/xml application/xml text/plain application/javascript text/css application/wasm;
+
+  server {
+    listen __WEB_PORT__;
+    root __OUT__/web/Tank.Flash;
+    index index.htm;
+    add_header Access-Control-Allow-Origin * always;
+
+    if ($case_fixed_uri) { rewrite ^ $case_fixed_uri last; }
+
+    location /flash/    { root __OUT__/site; }
+    location /resource/ { root __OUT__/site; }
+    location /ruffle/   { alias __OUT__/site/ruffle/; }
+    location /fonts/    { alias __OUT__/site/fonts/; }
+    location = /ruffle-config.js { alias __OUT__/site/ruffle-config.js; }
+    location = /crossdomain.xml { alias __OUT__/site/flash/crossdomain.xml; }
+
+    # game API (Tank.Request): static xml/files first, then ASP.NET
+    location /request/ {
+      alias __OUT__/web/Tank.Request/;
+      try_files $uri @request;
+    }
+    location ~* ^/request/.*\.(ashx|aspx|asmx)$ { include /etc/nginx/fastcgi_params; __FASTCGI__ }
+    location @request { include /etc/nginx/fastcgi_params; __FASTCGI__ }
+
+    # portal (Tank.Flash)
+    location ~* \.(ashx|aspx|asmx)$ { include /etc/nginx/fastcgi_params; __FASTCGI__ }
+    location / { try_files $uri $uri/ =404; }
+  }
+}

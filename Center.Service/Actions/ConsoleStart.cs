@@ -1,4 +1,4 @@
-using Bussiness.Protocol;
+﻿using Bussiness.Protocol;
 using Center.Server;
 using Game.Base;
 using Game.Service;
@@ -40,6 +40,11 @@ namespace Center.Service.actions
 				{
 					Console.Write("> ");
 					string line = Console.ReadLine();
+					if (line == null)
+					{
+						// stdin closed (running as a background service): keep serving
+						System.Threading.Thread.Sleep(System.Threading.Timeout.Infinite);
+					}
 					string[] para = line.Split('&');
 					switch (para[0].ToLower())
 					{

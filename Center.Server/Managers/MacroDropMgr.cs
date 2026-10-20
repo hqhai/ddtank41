@@ -56,7 +56,7 @@ namespace Center.Server.Managers
         public static bool Init()
         {
 			m_lock = new ReaderWriterLock();
-			FilePath = Directory.GetCurrentDirectory() + "\\macrodrop\\macroDrop.ini";
+			FilePath = Directory.GetCurrentDirectory() + "/macrodrop/macroDrop.ini";
 			return Reload();
         }
 

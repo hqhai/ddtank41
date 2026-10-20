@@ -50,7 +50,7 @@ namespace SqlDataProvider.BaseClass
 			}
 			catch (SqlException ex)
 			{
-				ApplicationLog.WriteError("\u00b4ò¿ªÊý¾Ý¿âÁ¬½Ó\u00b4íÎó:" + ex.Message.Trim());
+				ApplicationLog.WriteError("Open database connection error: " + ex.Message.Trim());
 				return false;
 			}
         }
@@ -71,7 +71,7 @@ namespace SqlDataProvider.BaseClass
 			}
 			catch (SqlException ex)
 			{
-				ApplicationLog.WriteError("Ö\u00b4ÐÐsqlÓï¾ä: " + Sqlcomm + "\u00b4íÎóÐÅÏ¢Îª: " + ex.Message.Trim());
+				ApplicationLog.WriteError("Execute sql: " + Sqlcomm + " error: " + ex.Message.Trim());
 				return false;
 			}
 			finally
@@ -101,7 +101,7 @@ namespace SqlDataProvider.BaseClass
 				}
 				catch (SqlException ex)
 				{
-					ApplicationLog.WriteError("Ö\u00b4ÐÐsqlÓï¾ä: " + Sqlcomm + "\u00b4íÎóÐÅÏ¢Îª: " + ex.Message.Trim());
+					ApplicationLog.WriteError("Execute sql: " + Sqlcomm + " error: " + ex.Message.Trim());
 				}
 				finally
 				{
@@ -131,7 +131,7 @@ namespace SqlDataProvider.BaseClass
 			}
 			catch (SqlException ex)
 			{
-				ApplicationLog.WriteError("Ö\u00b4ÐÐsqlÓï¾ä: " + Sqlcomm + "\u00b4íÎóÐÅÏ¢Îª: " + ex.Message.Trim());
+				ApplicationLog.WriteError("Execute sql: " + Sqlcomm + " error: " + ex.Message.Trim());
 			}
 			finally
 			{
@@ -223,7 +223,7 @@ namespace SqlDataProvider.BaseClass
 			}
 			catch (SqlException ex)
 			{
-				ApplicationLog.WriteError("Ö\u00b4ÐÐsqlÓï¾ä: " + Sqlcomm + "\u00b4íÎóÐÅÏ¢Îª: " + ex.Message.Trim());
+				ApplicationLog.WriteError("Execute sql: " + Sqlcomm + " error: " + ex.Message.Trim());
 			}
 			finally
 			{
@@ -253,7 +253,7 @@ namespace SqlDataProvider.BaseClass
 			}
 			catch (SqlException ex)
 			{
-				ApplicationLog.WriteError("Ö\u00b4ÐÐ\u00b4æ\u00b4¢¹ý³Ì: " + ProcedureName + "\u00b4íÎóÐÅÏ¢Îª: " + ex.Message.Trim());
+				ApplicationLog.WriteError("Execute procedure: " + ProcedureName + " error: " + ex.Message.Trim());
 				return false;
 			}
 			finally
@@ -280,7 +280,7 @@ namespace SqlDataProvider.BaseClass
 			}
 			catch (SqlException ex)
 			{
-				ApplicationLog.WriteError("Ö\u00b4ÐÐ\u00b4æ\u00b4¢¹ý³Ì: " + ProcedureName + "\u00b4íÎóÐÅÏ¢Îª: " + ex.Message.Trim());
+				ApplicationLog.WriteError("Execute procedure: " + ProcedureName + " error: " + ex.Message.Trim());
 				return false;
 			}
 			finally
@@ -307,7 +307,7 @@ namespace SqlDataProvider.BaseClass
 			}
 			catch (SqlException ex)
 			{
-				ApplicationLog.WriteError("Ö\u00b4ÐÐ\u00b4æ\u00b4¢¹ý³Ì: " + ProcedureName + "\u00b4íÎóÐÅÏ¢Îª: " + ex.Message.Trim());
+				ApplicationLog.WriteError("Execute procedure: " + ProcedureName + " error: " + ex.Message.Trim());
 				return false;
 			}
 			return true;
@@ -333,7 +333,7 @@ namespace SqlDataProvider.BaseClass
 			}
 			catch (SqlException ex)
 			{
-				ApplicationLog.WriteError("Ö\u00b4ÐÐ\u00b4æ\u00b4¢¹ý³Ì: " + ProcedureName + "\u00b4íÎóÐÅÏ¢Îª: " + ex.Message.Trim());
+				ApplicationLog.WriteError("Execute procedure: " + ProcedureName + " error: " + ex.Message.Trim());
 				return false;
 			}
 			return true;
@@ -477,7 +477,7 @@ namespace SqlDataProvider.BaseClass
 			}
 			catch (SqlException ex)
 			{
-				ApplicationLog.WriteError("Ö\u00b4ÐÐ\u00b4æ\u00b4¢¹ý³Ì: " + ProcedureName + "\u00b4íÎóÐÅÏ¢Îª: " + ex.Message.Trim());
+				ApplicationLog.WriteError("Execute procedure: " + ProcedureName + " error: " + ex.Message.Trim());
 			}
 			finally
 			{
@@ -508,7 +508,7 @@ namespace SqlDataProvider.BaseClass
 			}
 			catch (SqlException ex)
 			{
-				ApplicationLog.WriteError("Ö\u00b4ÐÐ\u00b4æ\u00b4¢¹ý³Ì: " + ProcedureName + "\u00b4íÎóÐÅÏ¢Îª: " + ex.Message.Trim());
+				ApplicationLog.WriteError("Execute procedure: " + ProcedureName + " error: " + ex.Message.Trim());
 			}
 			finally
 			{
@@ -545,7 +545,7 @@ namespace SqlDataProvider.BaseClass
 			}
 			catch (SqlException ex)
 			{
-				ApplicationLog.WriteError("Ö\u00b4ÐÐ\u00b4æ\u00b4¢¹ý³Ì: " + ProcedureName + "\u00b4íÎóÐÅÏ¢Îª: " + ex.Message.Trim());
+				ApplicationLog.WriteError("Execute procedure: " + ProcedureName + " error: " + ex.Message.Trim());
 			}
 			finally
 			{
@@ -586,7 +586,7 @@ namespace SqlDataProvider.BaseClass
 			}
 			catch (SqlException ex)
 			{
-				ApplicationLog.WriteError("Ö\u00b4ÐÐ\u00b4æ\u00b4¢¹ý³Ì: " + ProcedureName + "\u00b4íÎóÐÅÏ¢Îª: " + ex.Message.Trim());
+				ApplicationLog.WriteError("Execute procedure: " + ProcedureName + " error: " + ex.Message.Trim());
 			}
 			finally
 			{
@@ -618,7 +618,7 @@ namespace SqlDataProvider.BaseClass
 			}
 			catch (SqlException ex)
 			{
-				ApplicationLog.WriteError("Ö\u00b4ÐÐ\u00b4æ\u00b4¢¹ý³Ì: " + ProcedureName + "\u00b4íÎóÐÅÏ¢Îª: " + ex.Message.Trim());
+				ApplicationLog.WriteError("Execute procedure: " + ProcedureName + " error: " + ex.Message.Trim());
 				return false;
 			}
 			finally
@@ -654,7 +654,7 @@ namespace SqlDataProvider.BaseClass
 			}
 			catch (SqlException ex)
 			{
-				ApplicationLog.WriteError("Ö\u00b4ÐÐ\u00b4æ\u00b4¢¹ý³Ì: " + ProcedureName + "\u00b4íÎóÐÅÏ¢Îª: " + ex.Message.Trim());
+				ApplicationLog.WriteError("Execute procedure: " + ProcedureName + " error: " + ex.Message.Trim());
 				return false;
 			}
 			finally
@@ -709,7 +709,7 @@ namespace SqlDataProvider.BaseClass
 			}
 			catch (SqlException ex)
 			{
-				ApplicationLog.WriteError("Ö\u00b4ÐÐ\u00b4æ\u00b4¢¹ý³Ì: " + ProcedureName + "\u00b4íÎóÐÅÏ¢Îª: " + ex.Message.Trim());
+				ApplicationLog.WriteError("Execute procedure: " + ProcedureName + " error: " + ex.Message.Trim());
 			}
 			finally
 			{

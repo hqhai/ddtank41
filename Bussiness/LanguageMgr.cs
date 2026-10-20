@@ -58,7 +58,7 @@ namespace Bussiness
         {
             Hashtable list = new Hashtable();
 
-            string filePath = path + LanguageFile;
+            string filePath = Path.Combine(path ?? "", LanguageFile);
             if (!File.Exists(filePath))
             {
                 log.Error("Language file : " + filePath + " not found !");

@@ -67,14 +67,22 @@ namespace Game.Service.actions
             FusionCombined.ListCombinedFusion();
             Console.WriteLine("Server started!");
             ConsoleClient client = new ConsoleClient();
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                handler = ConsoleCtrHandler;
+                SetConsoleCtrlHandler(handler, add: true);
+            }
             while (GameServer.KeepRunning)
             {
                 try
                 {
-                    handler = ConsoleCtrHandler;
-                    SetConsoleCtrlHandler(handler, add: true);
                     Console.Write("> ");
                     string line = Console.ReadLine();
+                    if (line == null)
+                    {
+                        // stdin closed (running as a background service): keep serving
+                        Thread.Sleep(Timeout.Infinite);
+                    }
                     switch (line.Split(' ')[0])
                     {
                         case "exit":

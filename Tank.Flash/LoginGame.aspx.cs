@@ -59,8 +59,10 @@ namespace Tank.Flash
                 {
                     key = BaseInterface.GetLoginKey;
                 }
+                // Tank.Request/CreateLogin.aspx expects "name|password|time|md5(name+password+time+LoginKey)"
+                password = password.ToUpper();
                 string v = BaseInterface.md5(name + password + time.ToString() + key);
-                string Url = (BaseInterface.LoginUrl + "?content=" + HttpUtility.UrlEncode(name + "|" + password +"|srv|login" + "|" + time.ToString() + "|" + v));
+                string Url = (BaseInterface.LoginUrl + "?content=" + HttpUtility.UrlEncode(name + "|" + password + "|" + time.ToString() + "|" + v));
                 result = BaseInterface.RequestContent(Url);
                 if (result == "0")
                 {

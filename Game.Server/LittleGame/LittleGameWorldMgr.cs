@@ -207,11 +207,11 @@ namespace Game.Server.LittleGame
 
         private static void InitializeMap()
         {
-            if (!File.Exists("datas/LittleGame/map.data"))
+            if (!File.Exists("Datas/LittleGame/map.data"))
             {
                 throw new Exception("Map Not Found");
             }
-            var data = File.ReadAllBytes("datas/LittleGame/map.data");
+            var data = File.ReadAllBytes("Datas/LittleGame/map.data");
             var map = new MapReader(Marshal.Uncompress(data));
             Map = new MapInfo(map.ReadInt(), map.ReadInt());
             for (var i = 0; i < Map.Width; i++)
