@@ -79,9 +79,16 @@ Code vẫn chạy trên Windows như bản gốc (các sửa đổi đều tươ
 
 - Đăng ký trên trang chủ (có mã xác nhận). Lần đầu vào game sẽ chọn giới tính + tên nhân vật.
 - Phòng game (PvP) mở từ **cấp 2**; bot tự ghép trận nếu không có người chơi khác.
+- Đánh PvP giữa 2 người: người vào **cùng một phòng là đồng đội**. Muốn đánh nhau thì mỗi người
+  bấm **Bắt đầu** (trong Phòng game) để tạo phòng "Thi đấu" riêng, rồi cả hai bấm **Bắt đầu** trong
+  phòng → hệ thống ghép 2 phòng thành một trận. ("Tổ đội" là tìm phòng có sẵn để vào nhanh.)
 - Nâng cấp/cộng xu cho tài khoản (GM) bằng SQL, ví dụ:
   `UPDATE Project_Player34..Sys_Users_Detail SET Grade=20, GP=200000, Money=1000000 WHERE UserName='ten_dang_nhap'`
-  (làm khi người chơi đang offline).
+  (làm khi người chơi đang offline). **Sau khi nhảy nhiều cấp bằng SQL**, lần đăng nhập đầu tiên
+  client phải nhận dồn hàng chục nhiệm vụ của các cấp bị bỏ qua và bị kẹt: sảnh không hiện danh
+  sách người chơi, bấm tạo phòng không có tác dụng. Cách xử lý: đăng nhập một lần, chờ chuỗi hiệu
+  ứng "mở khu mới" chạy xong, thoát ra rồi đăng nhập lại; từ lần thứ hai sẽ bình thường. Người chơi
+  lên cấp tự nhiên trong game không gặp lỗi này.
 
 ## Những gì đã được phục dựng / bù vào
 
