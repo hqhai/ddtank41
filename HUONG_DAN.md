@@ -84,11 +84,7 @@ Code vẫn chạy trên Windows như bản gốc (các sửa đổi đều tươ
   phòng → hệ thống ghép 2 phòng thành một trận. ("Tổ đội" là tìm phòng có sẵn để vào nhanh.)
 - Nâng cấp/cộng xu cho tài khoản (GM) bằng SQL, ví dụ:
   `UPDATE Project_Player34..Sys_Users_Detail SET Grade=20, GP=200000, Money=1000000 WHERE UserName='ten_dang_nhap'`
-  (làm khi người chơi đang offline). **Sau khi nhảy nhiều cấp bằng SQL**, lần đăng nhập đầu tiên
-  client phải nhận dồn hàng chục nhiệm vụ của các cấp bị bỏ qua và bị kẹt: sảnh không hiện danh
-  sách người chơi, bấm tạo phòng không có tác dụng. Cách xử lý: đăng nhập một lần, chờ chuỗi hiệu
-  ứng "mở khu mới" chạy xong, thoát ra rồi đăng nhập lại; từ lần thứ hai sẽ bình thường. Người chơi
-  lên cấp tự nhiên trong game không gặp lỗi này.
+  (làm khi người chơi đang offline).
 
 ## Những gì đã được phục dựng / bù vào
 
@@ -103,6 +99,7 @@ Code vẫn chạy trên Windows như bản gốc (các sửa đổi đều tươ
 | Chạy trên Linux/Docker | Chỉ Windows | Sửa đường dẫn, IniReader, console, log, phân biệt hoa/thường… |
 | Script AI phó bản (PvE) | Bị tác giả xoá (không biên dịch được) | Khôi phục từ lịch sử git + DLL cũ, bổ sung API engine → project `GameServerScripts` (598/757 script DB tham chiếu chạy được) |
 | Tạo nhân vật lần đầu | Client gọi đăng ký trước khi tài khoản game tồn tại → kẹt | Tạo tài khoản trước trong `VisualizeRegister` |
+| Nhận nhiều nhiệm vụ cùng lúc (vd. GM nâng nhiều cấp) | Client gửi hàng nghìn gói nhận nhiệm vụ trùng, sảnh kẹt, không tạo được phòng | Vá client (`Source Flash/FlashSV1/2.png`), xem `deploy/client-patches/` |
 
 Đã kiểm thử bằng trình duyệt tự động: đăng ký → tạo nhân vật → vào sảnh → mua đồ trong Shop →
 tạo phòng PvP → ghép trận với bot → bắn, phá địa hình, trừ máu; 2 người chơi mời nhau vào
