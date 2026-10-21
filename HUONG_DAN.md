@@ -78,13 +78,24 @@ Code vẫn chạy trên Windows như bản gốc (các sửa đổi đều tươ
 ## Tài khoản
 
 - Đăng ký trên trang chủ (có mã xác nhận). Lần đầu vào game sẽ chọn giới tính + tên nhân vật.
-- Phòng game (PvP) mở từ **cấp 2**; bot tự ghép trận nếu không có người chơi khác.
-- Đánh PvP giữa 2 người: người vào **cùng một phòng là đồng đội**. Muốn đánh nhau thì mỗi người
-  bấm **Bắt đầu** (trong Phòng game) để tạo phòng "Thi đấu" riêng, rồi cả hai bấm **Bắt đầu** trong
-  phòng → hệ thống ghép 2 phòng thành một trận. ("Tổ đội" là tìm phòng có sẵn để vào nhanh.)
+- Đánh PvP: người vào **cùng một phòng là đồng đội**. Mỗi đội bấm **Bắt đầu** (trong Phòng game)
+  để tạo một phòng "Thi đấu", mời đồng đội bằng nút **Mời**, rồi chủ phòng bấm **Bắt đầu** → hệ thống
+  ghép với một phòng khác **có cùng số người** (1v1, 2v2, 3v3, 4v4). ("Tổ đội" là tìm phòng có sẵn
+  để vào nhanh.)
 - Nâng cấp/cộng xu cho tài khoản (GM) bằng SQL, ví dụ:
   `UPDATE Project_Player34..Sys_Users_Detail SET Grade=20, GP=200000, Money=1000000 WHERE UserName='ten_dang_nhap'`
   (làm khi người chơi đang offline).
+
+## Tuỳ chọn cho server PvP
+
+Đặt trong `deploy/docker/.env` (Docker) hoặc `deploy/server.env` (chạy trực tiếp), rồi khởi động lại
+(`docker compose up -d`):
+
+| Biến | Mặc định | Ý nghĩa |
+|---|---|---|
+| `SKIP_NEWBIE_GUIDE` | `true` | Bỏ màn hướng dẫn tân thủ: nhân vật mới (cấp 1) vào thẳng sảnh, mọi khu (Phòng game, Shop…) mở sẵn, không còn mũi tên/bảng chỉ dẫn. Bật thì áp dụng cả cho nhân vật cũ. |
+| `PVP_AUTO_BOT` | `false` | `false`: chỉ ghép phòng người với phòng người, không có bot; mọi phòng cùng số người đều ghép được với nhau (không giới hạn thời gian chờ hay chênh lệch lực chiến). `true`: như game gốc, chờ ~20 giây không có ai thì đánh với bot. |
+| `STARTING_MONEY` / `STARTING_GOLD` | `1000000` | Xu / vàng tặng sẵn cho **nhân vật mới tạo** để mua vũ khí, đạo cụ chiến đấu trong Shop. |
 
 ## Những gì đã được phục dựng / bù vào
 

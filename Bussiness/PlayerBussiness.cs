@@ -25,12 +25,12 @@ namespace Bussiness
                 player.Skin = "";
                 player.ConsortiaID = 0;
                 player.Defence = 0;
-                player.Gold = 0;
+                player.Gold = gold;
                 player.GP = 1;
                 player.Grade = 1;
                 player.ID = 0;
                 player.Luck = 0;
-                player.Money = 0;
+                player.Money = money;
                 player.NickName = "";
                 player.Sex = sex;
                 player.State = 0;

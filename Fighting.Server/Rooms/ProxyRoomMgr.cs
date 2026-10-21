@@ -142,6 +142,7 @@ namespace Fighting.Server.Rooms
         private static void PickUpRooms(long long_2)
         {
             List<ProxyRoom> waitMatchRoomUnsafe = GetWaitMatchRoomUnsafe();
+            bool autoBot = FightServer.Instance.Configuration.PvpAutoBot;
             foreach (ProxyRoom red in waitMatchRoomUnsafe)
             {
                 int minValue = int.MinValue;
@@ -178,7 +179,8 @@ namespace Fighting.Server.Rooms
                                 if (blue != red && !red.isAutoBot && blue.PlayerCount == red.PlayerCount && !blue.IsPlaying && !blue.IsCrossZone && blue.ZoneId == red.ZoneId && (blue.GameType == eGameType.ALL || blue.GameType == eGameType.Free))
                                 {
                                     int score = CalculateScore(red, blue);
-                                    if (score < 2 && red.PickUpCount < 3 && !blue.isAutoBot)
+                                    // without auto-bots, any two waiting player rooms of the same size are matched
+                                    if (!blue.isAutoBot && (!autoBot || (score < 2 && red.PickUpCount < 3)))
                                     {
                                         matchRoom = blue;
                                         //break;
@@ -211,7 +213,7 @@ namespace Fighting.Server.Rooms
                 }
                 if (!red.IsCrossZone)
                 {
-                    if (red.PickUpCount >= 4 && !red.startWithNpc && !red.isAutoBot && red.RoomType == eRoomType.Match && red.NpcId > 0 && red.GameType != eGameType.Guild)// && red.PlayerCount == 1)
+                    if (autoBot && red.PickUpCount >= 4 && !red.startWithNpc && !red.isAutoBot && red.RoomType == eRoomType.Match && red.NpcId > 0 && red.GameType != eGameType.Guild)// && red.PlayerCount == 1)
                     {
                         red.startWithNpc = true;
                         red.Client.SendBeginFightNpc(red.selfId, (int)red.RoomType, (int)red.GameType, red.NpcId, red.PlayerCount);

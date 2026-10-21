@@ -27,6 +27,9 @@ namespace Fighting.Server
 
         public string Ip;
 
+        // false: PvP rooms are only matched with other players' rooms (no auto-bot opponents)
+        public bool PvpAutoBot = true;
+
         protected override void Load(Type type)
         {
 			if (Assembly.GetEntryAssembly() != null)
@@ -54,6 +57,7 @@ namespace Fighting.Server
 			ScriptAssemblies = ConfigurationSettings.AppSettings["ScriptAssemblies"];
 			ScriptCompilationTarget = ConfigurationSettings.AppSettings["ScriptCompilationTarget"];
 			ZoneId = int.Parse(ConfigurationSettings.AppSettings["ServerID"]);
+			PvpAutoBot = !bool.TryParse(ConfigurationSettings.AppSettings["PvpAutoBot"], out bool autoBot) || autoBot;
 			RootDirectory = new FileInfo(Assembly.GetEntryAssembly().Location).DirectoryName;
         }
     }

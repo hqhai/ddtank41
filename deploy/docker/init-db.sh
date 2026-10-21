@@ -21,4 +21,12 @@ restore Project_Player34 Player34.bak DDTMixTankAc DDTMixTankAc_log
 
 for f in /sql/*.sql; do echo "applying $(basename "$f")"; $SQL -i "$f" >/dev/null; done
 $SQL -d Project_Player34 -Q "UPDATE Server_List SET IP = N'${PUBLIC_HOST}', Port = ${GAME_PORT:-9500}, State = 1" >/dev/null
+# newbie guide: IsOldPlayer=1 opens every building from level 1 with no tutorial (see configure.py)
+case "${SKIP_NEWBIE_GUIDE:-true}" in 1|true|yes|on) OLD=1 ;; *) OLD=0 ;; esac
+$SQL -d Project_Player34 -Q "
+DECLARE @c sysname = (SELECT d.name FROM sys.default_constraints d
+    WHERE d.parent_object_id = OBJECT_ID('dbo.Sys_Users_Detail') AND COL_NAME(d.parent_object_id, d.parent_column_id) = 'IsOldPlayer');
+IF @c IS NOT NULL EXEC('ALTER TABLE dbo.Sys_Users_Detail DROP CONSTRAINT [' + @c + ']');
+ALTER TABLE dbo.Sys_Users_Detail ADD DEFAULT ($OLD) FOR IsOldPlayer;
+IF $OLD = 1 UPDATE dbo.Sys_Users_Detail SET IsOldPlayer = 1 WHERE IsOldPlayer = 0;" >/dev/null
 echo "database ready"

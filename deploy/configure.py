@@ -53,6 +53,27 @@ def set_app_settings(path, values):
     open(path, "w", encoding="utf-8").write(text)
 
 
+def env_on(env, key, default):
+    value = env.get(key, "")
+    return default if value == "" else value.lower() in ("1", "true", "yes", "on")
+
+
+def newbie_guide_sql(skip):
+    """IsOldPlayer=1 makes the client treat every newbie-guide step as done: no tutorial,
+    every building (game room, shop, ...) open from level 1. Applies to new characters via
+    the column default; when skipping, existing characters are switched too."""
+    value = 1 if skip else 0
+    sql = f"""DECLARE @c sysname = (SELECT d.name FROM sys.default_constraints d
+    WHERE d.parent_object_id = OBJECT_ID('dbo.Sys_Users_Detail')
+      AND COL_NAME(d.parent_object_id, d.parent_column_id) = 'IsOldPlayer');
+IF @c IS NOT NULL EXEC('ALTER TABLE dbo.Sys_Users_Detail DROP CONSTRAINT [' + @c + ']');
+ALTER TABLE dbo.Sys_Users_Detail ADD DEFAULT ({value}) FOR IsOldPlayer;
+"""
+    if skip:
+        sql += "UPDATE dbo.Sys_Users_Detail SET IsOldPlayer = 1 WHERE IsOldPlayer = 0;\n"
+    return sql + "GO"
+
+
 def main():
     env_file = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "server.env")
     out = sys.argv[2] if len(sys.argv) > 2 else os.path.join(HERE, "out")
@@ -75,7 +96,8 @@ def main():
     }
     services = {
         "Center.Service": {"IP": "127.0.0.1", "SystemNoticePath": "Languages/SystemNotice.xml"},
-        "Fighting.Service": {"IP": "127.0.0.1"},
+        "Fighting.Service": {"IP": "127.0.0.1",
+                             "PvpAutoBot": "true" if env_on(env, "PVP_AUTO_BOT", False) else "false"},
         "Road.Service": {"IP": "0.0.0.0", "Port": env.get("GAME_PORT", "9500"),
                          "LoginServerIp": "127.0.0.1", "FightServerIp": "127.0.0.1",
                          "ScriptCompilationTarget": "./GameServerScripts.dll"},
@@ -96,6 +118,9 @@ def main():
             "LogPath": "logs",
             "ReqPath": "./",
             "LoginIP": "",
+            # xu / vàng every new character starts with
+            "DefaultMoney": env.get("STARTING_MONEY") or "1000000",
+            "DefaultGold": env.get("STARTING_GOLD") or "1000000",
         })
         print("configured", req)
 
@@ -171,6 +196,7 @@ window.RufflePlayer.config = {{
 USE [{player}];
 UPDATE Server_List SET IP = N'{host}', Port = {game_port}, State = 1;
 GO
+{newbie_guide_sql(env_on(env, "SKIP_NEWBIE_GUIDE", True))}
 """)
     print("configured", sql)
 
