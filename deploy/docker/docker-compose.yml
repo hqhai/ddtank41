@@ -57,6 +57,9 @@ services:
       PVP_AUTO_BOT: ${PVP_AUTO_BOT:-false}
       STARTING_MONEY: ${STARTING_MONEY:-1000000}
       STARTING_GOLD: ${STARTING_GOLD:-1000000}
+      SITE_NAME: ${SITE_NAME:-}
+      SITE_SLOGAN: ${SITE_SLOGAN:-}
+      COMMUNITY_URL: ${COMMUNITY_URL:-}
     ports:
       - "${WEB_PORT}:80"
       - "${GAME_PORT}:${GAME_PORT}"   # game socket (native Flash Player / launcher clients)

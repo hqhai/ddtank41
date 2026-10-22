@@ -96,6 +96,9 @@ Code vẫn chạy trên Windows như bản gốc (các sửa đổi đều tươ
 | `SKIP_NEWBIE_GUIDE` | `true` | Bỏ màn hướng dẫn tân thủ: nhân vật mới (cấp 1) vào thẳng sảnh, mọi khu (Phòng game, Shop…) mở sẵn, không còn mũi tên/bảng chỉ dẫn. Bật thì áp dụng cả cho nhân vật cũ. |
 | `PVP_AUTO_BOT` | `false` | `false`: chỉ ghép phòng người với phòng người, không có bot; mọi phòng cùng số người đều ghép được với nhau (không giới hạn thời gian chờ hay chênh lệch lực chiến). `true`: như game gốc, chờ ~20 giây không có ai thì đánh với bot. |
 | `STARTING_MONEY` / `STARTING_GOLD` | `1000000` | Xu / vàng tặng sẵn cho **nhân vật mới tạo** để mua vũ khí, đạo cụ chiến đấu trong Shop. |
+| `SITE_NAME` | `Bắn Súng` | Tên server hiện trên trang chủ và trang chơi game. Đừng dùng tên/thương hiệu của công ty khác. |
+| `SITE_SLOGAN` | (trống) | Dòng chữ dưới tên server. |
+| `COMMUNITY_URL` | (trống) | Link nút "Cộng đồng" (nhóm Facebook, Discord…); để trống thì ẩn nút. |
 
 ## Những gì đã được phục dựng / bù vào
 

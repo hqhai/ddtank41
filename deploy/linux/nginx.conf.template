@@ -38,6 +38,7 @@ http {
     location /ruffle/   { alias __OUT__/site/ruffle/; }
     location /fonts/    { alias __OUT__/site/fonts/; }
     location = /ruffle-config.js { alias __OUT__/site/ruffle-config.js; }
+    location = /site-config.js { alias __OUT__/site/site-config.js; }
     location = /crossdomain.xml { alias __OUT__/site/flash/crossdomain.xml; }
 
     # game API (Tank.Request): static xml/files first, then ASP.NET
