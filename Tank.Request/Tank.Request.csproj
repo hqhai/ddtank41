@@ -103,6 +103,9 @@
     <Compile Include="AASUpdateState.aspx.designer.cs">
       <DependentUpon>AASUpdateState.aspx</DependentUpon>
     </Compile>
+    <Compile Include="admin\api.ashx.cs">
+      <DependentUpon>api.ashx</DependentUpon>
+    </Compile>
     <Compile Include="AccountRegister.ashx.cs">
       <DependentUpon>AccountRegister.ashx</DependentUpon>
     </Compile>
@@ -608,6 +611,8 @@
     <Content Include="CelebList\celebbyweekleaguescore.ashx" />
     <Content Include="CelebList\CelebByWeekOfferList.ashx" />
     <Content Include="CelebList\CreateAllCeleb.ashx" />
+    <Content Include="admin\api.ashx" />
+    <Content Include="admin\index.html" />
     <Content Include="AccountRegister.ashx" />
     <Content Include="ActiveList.ashx" />
     <Content Include="ActivePullDown.ashx" />

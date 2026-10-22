@@ -86,6 +86,17 @@ Code vẫn chạy trên Windows như bản gốc (các sửa đổi đều tươ
   `UPDATE Project_Player34..Sys_Users_Detail SET Grade=20, GP=200000, Money=1000000 WHERE UserName='ten_dang_nhap'`
   (làm khi người chơi đang offline).
 
+## Trang quản trị (`/admin/`)
+
+Đặt `ADMIN_PASSWORD` rồi khởi động lại, vào `http://<server>/admin/`:
+- **Tổng quan**: số người online, tổng nhân vật, tài khoản đang bị khoá; gửi **thông báo toàn server**.
+- **Người chơi**: tìm theo tài khoản / tên nhân vật / ID; **đổi cấp** (khi offline), **khoá / mở khoá** (người
+  bị khoá bị đá ra và không đăng nhập được đến hết hạn), **kick**.
+- **Gửi quà**: gửi thư kèm xu / vàng / lễ kim và tối đa 20 vật phẩm (chọn từ danh sách có ảnh, chỉnh số
+  lượng, hạn dùng, cường hoá, khoá giao dịch). Người chơi nhận được ngay cả khi đang online.
+
+Sai mật khẩu 5 lần liên tiếp sẽ bị chặn đăng nhập 10 phút.
+
 ## Tuỳ chọn cho server PvP
 
 Đặt trong `deploy/docker/.env` (Docker) hoặc `deploy/server.env` (chạy trực tiếp), rồi khởi động lại
@@ -99,6 +110,7 @@ Code vẫn chạy trên Windows như bản gốc (các sửa đổi đều tươ
 | `SITE_NAME` | `Bắn Súng` | Tên server hiện trên trang chủ và trang chơi game. Đừng dùng tên/thương hiệu của công ty khác. |
 | `SITE_SLOGAN` | (trống) | Dòng chữ dưới tên server. |
 | `COMMUNITY_URL` | (trống) | Link nút "Cộng đồng" (nhóm Facebook, Discord…); để trống thì ẩn nút. |
+| `ADMIN_PASSWORD` | (trống) | Mật khẩu trang quản trị **http://<server>/admin/**. Để trống thì trang quản trị bị tắt. Đặt mật khẩu dài, khó đoán. |
 
 ## Những gì đã được phục dựng / bù vào
 

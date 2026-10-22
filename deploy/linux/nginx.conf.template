@@ -49,6 +49,10 @@ http {
     location ~* ^/request/.*\.(ashx|aspx|asmx)$ { include /etc/nginx/fastcgi_params; __FASTCGI__ }
     location @request { include /etc/nginx/fastcgi_params; __FASTCGI__ }
 
+    # admin panel: static page + JSON API (request/admin/api.ashx), password from ADMIN_PASSWORD
+    location = /admin { return 301 /admin/; }
+    location /admin/ { alias __OUT__/web/Tank.Request/admin/; index index.html; }
+
     # portal (Tank.Flash)
     location ~* \.(ashx|aspx|asmx)$ { include /etc/nginx/fastcgi_params; __FASTCGI__ }
     location / { try_files $uri $uri/ =404; }

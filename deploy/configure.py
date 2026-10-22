@@ -122,6 +122,8 @@ def main():
             # xu / vàng every new character starts with
             "DefaultMoney": env.get("STARTING_MONEY") or "1000000",
             "DefaultGold": env.get("STARTING_GOLD") or "1000000",
+            # admin panel (/admin/) password; empty = panel disabled
+            "AdminPassword": env.get("ADMIN_PASSWORD", ""),
         })
         print("configured", req)
 

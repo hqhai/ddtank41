@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>Quản trị</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Be+Vietnam+Pro:wght@400;600;700&display=swap" />
+  <link rel="stylesheet" href="/theme/site.css" />
+  <script src="/site-config.js"></script>
+  <style>
+    [hidden] { display: none !important; }
+    body { background: #0a1430; min-height: 100vh; }
+    .wrap { max-width: 1240px; margin: 0 auto; padding: 0 16px 60px; }
+    .adm-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; background: linear-gradient(180deg, #13244d, #0b1633); border-bottom: 2px solid #f08a1c; position: sticky; top: 0; z-index: 10; }
+    .adm-bar .logo { transform: none; flex-direction: row; align-items: center; gap: 10px; }
+    .adm-bar .logo .name { font-size: 26px; -webkit-text-stroke-width: 1px; }
+    .tabsbar { display: flex; gap: 6px; margin: 22px 0 18px; flex-wrap: wrap; }
+    .tabsbar button { font-family: var(--font-display); font-weight: 800; font-size: 17px; color: #ffe7a3; background: #15275a; border: 2px solid #2b4488; border-radius: 999px; padding: 8px 20px; cursor: pointer; }
+    .tabsbar button.active { color: #fff; background: linear-gradient(#ffbe5c, #f08a1c); border-color: #fff3c4; text-shadow: 0 2px 0 #a14c08; }
+    .view { display: none; } .view.active { display: block; }
+    .box { background: #111f45; border: 1px solid #2b4488; border-radius: 16px; padding: 18px; margin-bottom: 18px; }
+    .box h3 { margin: 0 0 12px; font-family: var(--font-display); font-size: 22px; color: #ffd23f; }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 18px; }
+    .stat { padding: 18px; border-radius: 16px; background: radial-gradient(ellipse at top, #fff7e2, #f1cf8d); color: #2b1606; box-shadow: 0 0 0 3px #b06a1e; }
+    .stat b { display: block; font-family: var(--font-display); font-size: 38px; line-height: 1; color: #c2410c; }
+    .stat span { font-weight: 600; font-size: 14px; color: #7c2d12; }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    input, select, textarea { font: inherit; font-size: 15px; padding: 9px 12px; border-radius: 10px; border: 2px solid #2b4488; background: #0a1430; color: #fff; outline: none; }
+    input:focus, select:focus, textarea:focus { border-color: #f08a1c; }
+    textarea { width: 100%; min-height: 70px; resize: vertical; }
+    .btn { font-family: var(--font-display); font-weight: 800; font-size: 16px; border: 2px solid #ffd76a; border-radius: 12px; padding: 8px 18px; cursor: pointer; color: #fff; background: linear-gradient(#ff5b4a, #c81e1e); box-shadow: 0 3px 0 #4a1503; }
+    .btn.alt { background: linear-gradient(#ffbe5c, #f08a1c); border-color: #fff3c4; box-shadow: 0 3px 0 #a14c08; }
+    .btn.ghost { background: transparent; border-color: #4a64a8; box-shadow: none; color: #cfe0ff; }
+    .btn.sm { font-size: 13px; padding: 4px 10px; border-radius: 9px; }
+    .btn:disabled { opacity: .5; cursor: wait; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { padding: 9px 8px; text-align: left; border-bottom: 1px solid #22386f; }
+    th { color: #9fb3e6; font-weight: 600; font-size: 13px; }
+    td .actions { display: flex; gap: 5px; flex-wrap: wrap; }
+    .tag-on { color: #22c55e; font-weight: 700; } .tag-off { color: #7b8db8; } .tag-ban { color: #f87171; font-weight: 700; }
+    .num { font-variant-numeric: tabular-nums; }
+    .pager { display: flex; gap: 8px; align-items: center; justify-content: flex-end; margin-top: 12px; color: #9fb3e6; }
+    .grid2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 18px; }
+    label.f { display: flex; flex-direction: column; gap: 5px; font-size: 13px; font-weight: 600; color: #9fb3e6; flex: 1; min-width: 120px; }
+    .items { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 8px; max-height: 470px; overflow: auto; padding: 2px; }
+    .it { background: #0a1430; border: 2px solid #22386f; border-radius: 12px; padding: 6px 4px; text-align: center; cursor: pointer; font-size: 11px; color: #cfe0ff; line-height: 1.25; }
+    .it:hover { border-color: #f08a1c; }
+    .it img, .it .noimg { width: 52px; height: 52px; object-fit: contain; margin: 0 auto 4px; }
+    .it .noimg { display: grid; place-items: center; background: #15275a; border-radius: 8px; color: #4a64a8; font-weight: 800; }
+    .picked { display: flex; flex-direction: column; gap: 8px; }
+    .pk { display: grid; grid-template-columns: 44px 1fr repeat(3, 74px) auto auto; gap: 6px; align-items: center; background: #0a1430; border: 1px solid #22386f; border-radius: 12px; padding: 6px 8px; font-size: 13px; }
+    .pk img, .pk .noimg { width: 40px; height: 40px; object-fit: contain; }
+    .pk input { width: 74px; padding: 5px 6px; font-size: 13px; }
+    .hint { color: #7b8db8; font-size: 12px; }
+    .toast { position: fixed; right: 18px; bottom: 18px; z-index: 50; max-width: 380px; padding: 14px 18px; border-radius: 14px; font-weight: 600; box-shadow: 0 10px 30px rgba(0,0,0,.5); display: none; }
+    .toast.ok { display: block; background: #14532d; border: 2px solid #22c55e; }
+    .toast.err { display: block; background: #7f1d1d; border: 2px solid #f87171; }
+    .login-wrap { min-height: 100vh; display: grid; place-items: center; padding: 16px; }
+    .login-wrap .panel { width: min(400px, 100%); }
+    .login-wrap h2 { margin: 0 0 14px; text-align: center; font-family: var(--font-display); font-size: 28px; color: #9a3412; }
+    dialog { border: 0; border-radius: 18px; padding: 22px; background: #111f45; color: #fff; box-shadow: 0 0 0 2px #f08a1c, 0 30px 60px rgba(0,0,0,.6); width: min(420px, 92vw); }
+    dialog::backdrop { background: rgba(5,10,25,.7); }
+    dialog h3 { margin: 0 0 12px; font-family: var(--font-display); color: #ffd23f; }
+    @media (max-width: 900px) { .grid2 { grid-template-columns: 1fr; } .pk { grid-template-columns: 40px 1fr repeat(3, 64px); } }
+  </style>
+</head>
+<body>
+  <!-- login -->
+  <div class="login-wrap" id="login-view" hidden>
+    <div class="panel">
+      <h2>Đăng nhập quản trị</h2>
+      <form class="form active" id="login-form">
+        <label>Mật khẩu quản trị <input type="password" name="password" autocomplete="current-password" required /></label>
+        <div class="msg err" id="login-msg"></div>
+        <button class="submit" type="submit">VÀO TRANG QUẢN TRỊ</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- app -->
+  <div id="app" hidden>
+    <div class="adm-bar">
+      <a class="logo" href="/"><span class="tag">ADMIN</span><span class="name" data-site="name">Bắn Súng</span></a>
+      <div class="row"><a class="pill-btn" href="/" target="_blank">Xem trang chủ</a><button class="pill-btn" id="logout">Đăng xuất</button></div>
+    </div>
+    <div class="wrap">
+      <div class="tabsbar">
+        <button data-view="overview" class="active">Tổng quan</button>
+        <button data-view="players">Người chơi</button>
+        <button data-view="gift">Gửi quà</button>
+      </div>
+
+      <section class="view active" id="view-overview">
+        <div class="stats">
+          <div class="stat"><b id="st-online">–</b><span>Đang online</span></div>
+          <div class="stat"><b id="st-players">–</b><span>Nhân vật</span></div>
+          <div class="stat"><b id="st-new">–</b><span>Tạo trong 24 giờ</span></div>
+          <div class="stat"><b id="st-banned">–</b><span>Đang bị khoá</span></div>
+        </div>
+        <div class="box">
+          <h3>Thông báo toàn server</h3>
+          <form id="notice-form" class="row">
+            <input name="message" maxlength="200" placeholder="Ví dụ: 20h tối nay tổ chức giải đấu 2v2!" style="flex: 1; min-width: 220px" required />
+            <button class="btn" type="submit">Gửi thông báo</button>
+          </form>
+          <p class="hint">Hiện ngay trên khung chat của mọi người chơi đang online.</p>
+        </div>
+      </section>
+
+      <section class="view" id="view-players">
+        <div class="box">
+          <form id="search-form" class="row">
+            <input name="q" placeholder="Tìm theo tài khoản, tên nhân vật hoặc ID" style="flex: 1; min-width: 220px" />
+            <button class="btn alt" type="submit">Tìm</button>
+          </form>
+        </div>
+        <div class="box" style="overflow-x: auto">
+          <table>
+            <thead><tr><th>ID</th><th>Tài khoản</th><th>Nhân vật</th><th>Cấp</th><th>Xu</th><th>Vàng</th><th>Lực chiến</th><th>Trạng thái</th><th></th></tr></thead>
+            <tbody id="players-body"></tbody>
+          </table>
+          <div class="pager"><button class="btn ghost sm" id="pp">‹ Trước</button><span id="pinfo"></span><button class="btn ghost sm" id="pn">Sau ›</button></div>
+        </div>
+      </section>
+
+      <section class="view" id="view-gift">
+        <div class="grid2">
+          <div class="box">
+            <h3>Thư gửi</h3>
+            <form id="gift-form" class="picked">
+              <label class="f">Người nhận (tài khoản / tên nhân vật / ID)<input name="user" required /></label>
+              <label class="f">Tiêu đề<input name="title" maxlength="100" placeholder="Quà từ Ban Quản Trị" /></label>
+              <label class="f">Nội dung<textarea name="content" maxlength="500" placeholder="Chúc bạn chơi game vui vẻ!"></textarea></label>
+              <div class="row">
+                <label class="f">Xu<input name="money" type="number" min="0" value="0" /></label>
+                <label class="f">Vàng<input name="gold" type="number" min="0" value="0" /></label>
+                <label class="f">Lễ kim<input name="giftToken" type="number" min="0" value="0" /></label>
+              </div>
+              <div class="hint">Vật phẩm đính kèm (bấm vào đồ bên phải để thêm). Số ngày 0 = vĩnh viễn; Cường hoá tối đa 15.</div>
+              <div class="picked" id="picked"></div>
+              <button class="btn" type="submit">Gửi thư</button>
+            </form>
+          </div>
+          <div class="box">
+            <h3>Chọn vật phẩm</h3>
+            <form id="item-search" class="row" style="margin-bottom: 12px">
+              <select name="cat" id="cat"><option value="0">Tất cả loại</option></select>
+              <input name="q" placeholder="Tên hoặc mã đồ" style="flex: 1; min-width: 140px" />
+              <button class="btn alt" type="submit">Tìm</button>
+            </form>
+            <div class="items" id="items"></div>
+            <div class="pager"><button class="btn ghost sm" id="ip">‹</button><span id="iinfo"></span><button class="btn ghost sm" id="in">›</button></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <dialog id="dlg">
+    <h3 id="dlg-title"></h3>
+    <form method="dialog" id="dlg-form" class="picked">
+      <div id="dlg-body"></div>
+      <div class="row" style="justify-content: flex-end">
+        <button class="btn ghost" value="cancel" type="submit">Huỷ</button>
+        <button class="btn" value="ok" type="submit" id="dlg-ok">Đồng ý</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+  (function () {
+    var cfg = window.SITE_CONFIG || {};
+    document.querySelectorAll('[data-site="name"]').forEach(function (el) { el.textContent = cfg.name || "Bắn Súng"; });
+    document.title = "Quản trị – " + (cfg.name || "Bắn Súng");
+
+    var API = "/request/admin/api.ashx";
+    var $ = function (s) { return document.querySelector(s); };
+    var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
+    var fmt = function (n) { return Number(n || 0).toLocaleString("vi-VN"); };
+
+    function api(action, params, body) {
+      var url = API + "?action=" + action + (params ? "&" + new URLSearchParams(params) : "");
+      return fetch(url, {
+        method: body ? "POST" : "GET", credentials: "same-origin",
+        headers: { "X-Requested-With": "admin", "Content-Type": "application/json" },
+        body: body ? JSON.stringify(body) : undefined
+      }).then(function (r) { return r.json().catch(function () { return { ok: false, error: "Lỗi máy chủ (" + r.status + ")" }; }); })
+        .then(function (j) {
+          if (!j.ok) { if (j.error === "Chưa đăng nhập") showLogin(); throw new Error(j.error); }
+          return j.data;
+        });
+    }
+    var tt;
+    function toast(msg, ok) { var t = $("#toast"); t.textContent = msg; t.className = "toast " + (ok ? "ok" : "err"); clearTimeout(tt); tt = setTimeout(function () { t.className = "toast"; }, 4500); }
+
+    function showLogin() { $("#app").hidden = true; $("#login-view").hidden = false; }
+    function showApp() { $("#login-view").hidden = true; $("#app").hidden = false; loadStats(); }
+
+    $("#login-form").onsubmit = function (e) {
+      e.preventDefault();
+      api("login", null, { password: e.target.password.value })
+        .then(function () { e.target.password.value = ""; showApp(); })
+        .catch(function (err) { $("#login-msg").textContent = err.message; });
+    };
+    $("#logout").onclick = function () { api("logout", null, {}).finally(showLogin); };
+
+    document.querySelectorAll("[data-view]").forEach(function (b) {
+      b.onclick = function () {
+        document.querySelectorAll("[data-view]").forEach(function (x) { x.classList.toggle("active", x === b); });
+        document.querySelectorAll(".view").forEach(function (v) { v.classList.toggle("active", v.id === "view-" + b.dataset.view); });
+        if (b.dataset.view === "overview") loadStats();
+        if (b.dataset.view === "players") loadPlayers();
+        if (b.dataset.view === "gift" && !catsLoaded) loadCats();
+      };
+    });
+
+    // ---- overview
+    function loadStats() {
+      api("stats").then(function (s) {
+        $("#st-online").textContent = fmt(s.online); $("#st-players").textContent = fmt(s.players);
+        $("#st-new").textContent = fmt(s.newToday); $("#st-banned").textContent = fmt(s.banned);
+      }).catch(function (e) { toast(e.message); });
+    }
+    $("#notice-form").onsubmit = function (e) {
+      e.preventDefault();
+      api("notice", null, { message: e.target.message.value })
+        .then(function () { toast("Đã gửi thông báo", true); e.target.reset(); })
+        .catch(function (err) { toast(err.message); });
+    };
+
+    // ---- players
+    var pq = "", ppage = 1, ptotal = 0;
+    function loadPlayers() {
+      api("players", { q: pq, page: ppage }).then(function (d) {
+        ptotal = d.total;
+        $("#pinfo").textContent = "Trang " + d.page + " / " + Math.max(1, Math.ceil(d.total / d.size)) + " · " + fmt(d.total) + " nhân vật";
+        $("#players-body").innerHTML = d.players.map(function (p) {
+          var st = p.bannedUntil ? '<span class="tag-ban">Khoá đến ' + esc(p.bannedUntil) + "</span>" : (p.online ? '<span class="tag-on">● Online</span>' : '<span class="tag-off">Offline</span>');
+          return "<tr><td class=num>" + p.id + "</td><td>" + esc(p.user) + "</td><td><b>" + esc(p.nick) + "</b></td><td class=num>" + p.grade +
+            "</td><td class=num>" + fmt(p.money) + "</td><td class=num>" + fmt(p.gold) + "</td><td class=num>" + fmt(p.fightPower) + "</td><td>" + st +
+            '</td><td><div class="actions" data-user="' + esc(p.user) + '" data-nick="' + esc(p.nick) + '">' +
+            '<button class="btn alt sm" data-act="gift">Gửi quà</button>' +
+            '<button class="btn ghost sm" data-act="level">Đổi cấp</button>' +
+            (p.online ? '<button class="btn ghost sm" data-act="kick">Kick</button>' : "") +
+            (p.bannedUntil ? '<button class="btn ghost sm" data-act="unban">Mở khoá</button>' : '<button class="btn sm" data-act="ban">Khoá</button>') +
+            "</div></td></tr>";
+        }).join("") || '<tr><td colspan="9" class="hint">Không có nhân vật nào.</td></tr>';
+      }).catch(function (e) { toast(e.message); });
+    }
+    $("#search-form").onsubmit = function (e) { e.preventDefault(); pq = e.target.q.value.trim(); ppage = 1; loadPlayers(); };
+    $("#pp").onclick = function () { if (ppage > 1) { ppage--; loadPlayers(); } };
+    $("#pn").onclick = function () { if (ppage * 20 < ptotal) { ppage++; loadPlayers(); } };
+
+    function ask(title, html, okText) {
+      return new Promise(function (resolve) {
+        $("#dlg-title").textContent = title; $("#dlg-body").innerHTML = html; $("#dlg-ok").textContent = okText || "Đồng ý";
+        var d = $("#dlg");
+        d.onclose = function () { resolve(d.returnValue === "ok" ? new FormData($("#dlg-form")) : null); };
+        d.showModal();
+      });
+    }
+    $("#players-body").onclick = function (e) {
+      var b = e.target.closest("[data-act]"); if (!b) return;
+      var box = b.parentNode, user = box.dataset.user, nick = box.dataset.nick, act = b.dataset.act;
+      if (act === "gift") { document.querySelector('[data-view="gift"]').click(); $("#gift-form").user.value = user; return; }
+      if (act === "level") {
+        ask("Đổi cấp cho " + nick, '<label class="f">Cấp mới<input name="grade" type="number" min="1" max="100" value="20" required></label><p class="hint">Chỉ đổi được khi nhân vật đang offline.</p>')
+          .then(function (f) { if (f) api("level", null, { user: user, grade: f.get("grade") }).then(function () { toast("Đã đổi cấp", true); loadPlayers(); }).catch(function (e) { toast(e.message); }); });
+      }
+      if (act === "ban") {
+        ask("Khoá " + nick, '<label class="f">Số ngày khoá<input name="days" type="number" min="1" value="7" required></label><p class="hint">Người chơi bị đá ra ngay và không đăng nhập được đến hết hạn.</p>', "Khoá")
+          .then(function (f) { if (f) api("ban", null, { user: user, days: f.get("days") }).then(function () { toast("Đã khoá " + nick, true); loadPlayers(); }).catch(function (e) { toast(e.message); }); });
+      }
+      if (act === "unban") api("unban", null, { user: user }).then(function () { toast("Đã mở khoá " + nick, true); loadPlayers(); }).catch(function (e) { toast(e.message); });
+      if (act === "kick") api("kick", null, { user: user }).then(function () { toast("Đã kick " + nick, true); setTimeout(loadPlayers, 1500); }).catch(function (e) { toast(e.message); });
+    };
+
+    // ---- gift
+    var catsLoaded = false, iq = "", icat = 0, ipage = 1, itotal = 0, picked = [];
+    var icon = function (it) { return it.icon ? '<img src="/resource/' + esc(it.icon) + '" alt="" onerror="this.outerHTML=\'<div class=noimg>?</div>\'">' : '<div class="noimg">?</div>'; };
+    function loadCats() {
+      catsLoaded = true;
+      api("categories").then(function (cs) {
+        $("#cat").innerHTML = '<option value="0">Tất cả loại</option>' + cs.map(function (c) { return '<option value="' + c.id + '">' + esc(c.name) + " (" + c.count + ")</option>"; }).join("");
+      });
+      loadItems();
+    }
+    function loadItems() {
+      api("items", { q: iq, cat: icat, page: ipage }).then(function (d) {
+        itotal = d.total;
+        $("#iinfo").textContent = d.page + " / " + Math.max(1, Math.ceil(d.total / d.size));
+        window._items = d.items;
+        $("#items").innerHTML = d.items.map(function (it, i) { return '<div class="it" data-i="' + i + '" title="#' + it.id + '">' + icon(it) + esc(it.name) + "</div>"; }).join("") || '<div class="hint">Không có đồ nào.</div>';
+      }).catch(function (e) { toast(e.message); });
+    }
+    $("#item-search").onsubmit = function (e) { e.preventDefault(); iq = e.target.q.value.trim(); icat = e.target.cat.value; ipage = 1; loadItems(); };
+    $("#cat").onchange = function () { icat = this.value; ipage = 1; loadItems(); };
+    $("#ip").onclick = function () { if (ipage > 1) { ipage--; loadItems(); } };
+    $("#in").onclick = function () { if (ipage * 40 < itotal) { ipage++; loadItems(); } };
+    $("#items").onclick = function (e) {
+      var el = e.target.closest(".it"); if (!el) return;
+      if (picked.length >= 20) { toast("Tối đa 20 món mỗi lần gửi"); return; }
+      var it = window._items[+el.dataset.i];
+      picked.push({ id: it.id, name: it.name, icon: it.icon, count: 1, valid: 0, strengthen: 0, bind: true });
+      renderPicked();
+    };
+    function renderPicked() {
+      $("#picked").innerHTML = picked.map(function (p, i) {
+        return '<div class="pk" data-i="' + i + '">' + icon(p) + "<div><b>" + esc(p.name) + '</b><div class="hint">#' + p.id + "</div></div>" +
+          '<input type="number" min="1" data-k="count" value="' + p.count + '" title="Số lượng">' +
+          '<input type="number" min="0" data-k="valid" value="' + p.valid + '" title="Số ngày (0 = vĩnh viễn)">' +
+          '<input type="number" min="0" max="15" data-k="strengthen" value="' + p.strengthen + '" title="Cường hoá">' +
+          '<label class="hint"><input type="checkbox" data-k="bind"' + (p.bind ? " checked" : "") + "> Khoá</label>" +
+          '<button type="button" class="btn ghost sm" data-del>✕</button></div>';
+      }).join("");
+    }
+    $("#picked").oninput = function (e) {
+      var row = e.target.closest(".pk"); if (!row || !e.target.dataset.k) return;
+      var p = picked[+row.dataset.i]; p[e.target.dataset.k] = e.target.type === "checkbox" ? e.target.checked : e.target.value;
+    };
+    $("#picked").onclick = function (e) { if (e.target.hasAttribute("data-del")) { picked.splice(+e.target.closest(".pk").dataset.i, 1); renderPicked(); } };
+    $("#gift-form").onsubmit = function (e) {
+      e.preventDefault();
+      var f = e.target, btn = f.querySelector("button[type=submit]"); btn.disabled = true;
+      api("send", null, {
+        user: f.user.value, title: f.title.value, content: f.content.value,
+        money: f.money.value, gold: f.gold.value, giftToken: f.giftToken.value,
+        items: picked.map(function (p) { return { id: p.id, count: String(p.count), valid: String(p.valid), strengthen: String(p.strengthen), bind: !!p.bind }; })
+      }).then(function (d) {
+        toast("Đã gửi thư cho " + d.to + (d.items.length ? ": " + d.items.join(", ") : ""), true);
+        picked = []; renderPicked(); f.money.value = f.gold.value = f.giftToken.value = 0;
+      }).catch(function (err) { toast(err.message); }).finally(function () { btn.disabled = false; });
+    };
+
+    api("me").then(showApp).catch(function (e) {
+      showLogin();
+      if (e.message !== "Chưa đăng nhập") $("#login-msg").textContent = e.message;
+    });
+  })();
+  </script>
+</body>
+</html>
